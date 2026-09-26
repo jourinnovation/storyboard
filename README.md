@@ -1,5 +1,4 @@
 # storyboard
-storyboard template for video projects 
 Fillable, printable video storyboard for JOUR 4462 (Senior Media Practicum) at Cal Poly San Luis Obispo.
 
 **Live tool:** https://jourinnovation.github.io/storyboard/
