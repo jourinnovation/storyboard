@@ -169,48 +169,55 @@
   }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 
-  /* ---------- Print ---------- */
-  #print-root { display: none; }
+  /* ---------- Print layout ----------
+     Built off-screen at real page size so text can be measured and fitted before printing. */
+  #print-root { position: absolute; left: -20000px; top: 0; }
   @page { size: letter landscape; margin: 0.4in; }
+  .p-page {
+    width: 10.2in; height: 7.6in; display: flex; flex-direction: column; gap: 0.16in;
+    overflow: hidden; background: #fff; font-family: var(--sans); color: var(--ink);
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  .p-head {
+    display: flex; justify-content: space-between; gap: 24px; border-bottom: 2px solid var(--green);
+    padding-bottom: 6px; flex-shrink: 0;
+  }
+  .p-head h1 { margin: 0; font-family: var(--serif); font-weight: 600; font-size: 24px; line-height: 1; color: var(--green); }
+  .p-head .course { margin-top: 6px; font-size: 10px; letter-spacing: .04em; text-transform: uppercase; }
+  .p-meta { flex: 1; max-width: 6.4in; display: flex; flex-direction: column; justify-content: space-between; gap: 4px; }
+  .p-meta-row { display: flex; gap: 14px; align-items: flex-end; font-size: 10.5px; font-weight: 600; }
+  .p-line { display: flex; align-items: flex-end; gap: 5px; min-width: 0; }
+  .p-line span { flex: 1; min-width: 0; border-bottom: 1px solid var(--ink); font-weight: 400; min-height: 14px; padding: 0 2px; overflow-wrap: anywhere; }
+  .p-key { font-size: 9.5px; color: #444; }
+  .p-grid {
+    flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr)); gap: 0.16in;
+  }
+  .p-frame { border: 1.5px solid var(--ink); border-radius: 4px; display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
+  .p-bar {
+    height: 20px; flex-shrink: 0; display: flex; justify-content: space-between; align-items: center;
+    padding: 0 7px; border-bottom: 1.5px solid var(--ink); background: var(--tint); font-size: 10px; font-weight: 600;
+  }
+  .p-bar em { font-style: normal; font-weight: 400; display: inline-block; min-width: 26px; text-align: center; border-bottom: 1px solid var(--ink); }
+  .p-pic { flex: 1 1 auto; min-height: var(--pic-min, 1.1in); border-bottom: 1.5px solid var(--ink); position: relative; }
+  .p-pic img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .p-fields { flex-shrink: 0; padding: 3px 7px 6px; font-size: var(--fs, 9.5px); }
+  .p-row { display: flex; gap: 5px; align-items: baseline; padding-top: 3px; }
+  .p-row b { width: 5.4em; flex-shrink: 0; }
+  .p-row span {
+    flex: 1; min-width: 0; white-space: pre-wrap; overflow-wrap: anywhere;
+    line-height: 1.35em; min-height: calc(var(--lines, 1) * 1.35em);
+    border-bottom: 1px solid var(--rule); padding-bottom: 1px;
+  }
+  .p-frame.blank { border-style: dashed; border-color: #c4c4c4; }
+  .p-frame.blank * { visibility: hidden; }
+
   @media print {
     body { background: #fff; }
     .toolbar, main, .toast, .foot { display: none !important; }
-    #print-root { display: block; }
-    .p-page {
-      width: 10.2in; height: 7.6in; display: flex; flex-direction: column; gap: 0.16in;
-      page-break-after: always; break-after: page; overflow: hidden;
-      -webkit-print-color-adjust: exact; print-color-adjust: exact;
-    }
+    #print-root { position: static; }
+    .p-page { page-break-after: always; break-after: page; }
     .p-page:last-child { page-break-after: auto; break-after: auto; }
-    .p-head {
-      display: flex; justify-content: space-between; gap: 24px; border-bottom: 2px solid var(--green);
-      padding-bottom: 6px; flex-shrink: 0;
-    }
-    .p-head h1 { margin: 0; font-family: var(--serif); font-weight: 600; font-size: 24px; line-height: 1; color: var(--green); }
-    .p-head .course { margin-top: 6px; font-size: 10px; letter-spacing: .04em; text-transform: uppercase; }
-    .p-meta { flex: 1; max-width: 6.4in; display: flex; flex-direction: column; justify-content: space-between; gap: 4px; }
-    .p-meta-row { display: flex; gap: 14px; align-items: flex-end; font-size: 10.5px; font-weight: 600; }
-    .p-line { display: flex; align-items: flex-end; gap: 5px; }
-    .p-line span { flex: 1; border-bottom: 1px solid var(--ink); font-weight: 400; min-height: 14px; padding: 0 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .p-key { font-size: 9.5px; color: #444; }
-    .p-grid {
-      flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
-      grid-template-rows: repeat(2, minmax(0, 1fr)); gap: 0.16in;
-    }
-    .p-frame { border: 1.5px solid var(--ink); border-radius: 4px; display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
-    .p-bar {
-      height: 20px; flex-shrink: 0; display: flex; justify-content: space-between; align-items: center;
-      padding: 0 7px; border-bottom: 1.5px solid var(--ink); background: var(--tint); font-size: 10px; font-weight: 600;
-    }
-    .p-bar em { font-style: normal; font-weight: 400; display: inline-block; min-width: 26px; text-align: center; border-bottom: 1px solid var(--ink); }
-    .p-pic { flex: 1; min-height: 0; border-bottom: 1.5px solid var(--ink); position: relative; }
-    .p-pic img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-    .p-fields { flex-shrink: 0; padding: 3px 7px 6px; font-size: 9.5px; }
-    .p-row { display: flex; gap: 5px; align-items: flex-end; min-height: 16px; }
-    .p-row b { width: 52px; flex-shrink: 0; }
-    .p-row span { flex: 1; border-bottom: 1px solid var(--rule); min-height: 13px; line-height: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .p-frame.blank { border-style: dashed; border-color: #c4c4c4; }
-    .p-frame.blank * { visibility: hidden; }
   }
 </style>
 </head>
@@ -633,25 +640,46 @@
       </div>`;
     }
     $('print-root').innerHTML = html;
+    return fitPrint();
   }
   function printFrame(f, n) {
     if (!f) return '<div class="p-frame blank"></div>';
-    const audioLines = String(f.audio || '').split('\n');
-    const a1 = audioLines[0] || '', a2 = audioLines.slice(1).join(' ');
     return `<div class="p-frame">
       <div class="p-bar"><span>SHOT # <em>${n}</em></span><span>LENGTH <em>${esc(f.length)}</em> sec</span></div>
       <div class="p-pic">${f.image ? `<img src="${f.image}" alt="">` : ''}</div>
       <div class="p-fields">
-        <div class="p-row"><b>Audio</b><span>${esc(a1)}</span></div>
-        <div class="p-row"><b></b><span>${esc(a2)}</span></div>
+        <div class="p-row"><b>Audio</b><span style="--lines:2">${esc(String(f.audio || '').trim())}</span></div>
         <div class="p-row"><b>Who / TC</b><span>${esc(f.who)}</span></div>
         <div class="p-row"><b>On screen</b><span>${esc(f.onscreen)}</span></div>
         <div class="p-row"><b>Purpose</b><span>${esc(f.purpose)}</span></div>
       </div>
     </div>`;
   }
+
+  // Shrink text, then the picture area, until each shot's content fits its box.
+  function fitPrint() {
+    const overflowing = (el) => el.scrollHeight > el.clientHeight + 1;
+    document.querySelectorAll('#print-root .p-frame:not(.blank)').forEach(frame => {
+      let fs = 9.5;
+      const steps = [['--pic-min', '1.1in'], ['--pic-min', '0.7in'], ['--pic-min', '0.35in']];
+      for (const [prop, val] of steps) {
+        frame.style.setProperty(prop, val);
+        while (overflowing(frame) && fs > 6.5) { fs -= 0.5; frame.style.setProperty('--fs', fs + 'px'); }
+        if (!overflowing(frame)) break;
+        fs = 9.5; frame.style.setProperty('--fs', fs + 'px');
+      }
+      while (overflowing(frame) && fs > 6.5) { fs -= 0.5; frame.style.setProperty('--fs', fs + 'px'); }
+      frame.dataset.overflow = overflowing(frame) ? '1' : '';
+    });
+    return document.querySelectorAll('#print-root .p-frame[data-overflow="1"]').length;
+  }
+
   window.addEventListener('beforeprint', buildPrint);
-  $('btn-print').onclick = () => { buildPrint(); window.print(); };
+  $('btn-print').onclick = () => {
+    const tooLong = buildPrint();
+    if (tooLong && !confirm(`${tooLong} shot${tooLong > 1 ? 's have' : ' has'} more text than fits in a printed box, even at the smallest size. Some text will be cut off. Print anyway?`)) return;
+    window.print();
+  };
 
   window.addEventListener('resize', () => document.querySelectorAll('.field textarea').forEach(autosize));
   renderAll();
